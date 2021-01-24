@@ -24,17 +24,14 @@ public class AuthenticationService implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getName();
         String password = authentication.getCredentials().toString();
-        System.out.println("username entered: "+username+", password entered: " +password);
         User user = userMapper.getUser(username);
         if (user != null) {
-            System.out.println("Authenticationservice user not null" );
             String encodedSalt = user.getSalt();
             String hashedPassword = hashService.getHashedValue(password, encodedSalt);
             if (user.getPassword().equals(hashedPassword)) {
                 return new UsernamePasswordAuthenticationToken(username, password, new ArrayList<>());
             }
         }
-        System.out.println("User in Authentication Service is null");
         return null;
     }
 

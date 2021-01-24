@@ -11,13 +11,13 @@ public class Note {
 
     private Integer noteId;
     private String notetitle;
-    private String noteDescription;
+    private String notedescription;
     private Integer userId;
 
-    public Note(Integer noteId, String notetitle, String noteDescription, Integer userId) {
-        this.noteId = noteId;
+    public Note(String notetitle, String noteDescription, Integer userId) {
+
         this.notetitle = notetitle;
-        this.noteDescription = noteDescription;
+        this.notedescription = noteDescription;
         this.userId = userId;
     }
 
@@ -38,11 +38,11 @@ public class Note {
     }
 
     public String getNoteDescription() {
-        return noteDescription;
+        return notedescription;
     }
 
     public void setNoteDescription(String noteDescription) {
-        this.noteDescription = noteDescription;
+        this.notedescription = noteDescription;
     }
 
     public Integer getUserId() {

@@ -24,7 +24,6 @@ public class UserService {
     }
 
     public int createUser(User user) {
-        System.out.println("creating user in userservice");
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[16];
         random.nextBytes(salt);

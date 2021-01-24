@@ -16,15 +16,17 @@ public class File {
     private String fileName;
     private String contentType;
     private String fileSize;
-    private Integer userId;
-    private Blob fileData;
+    private Integer userid;
+    private byte [] fileData;
 
-    public File(Integer fileId, String fileName, String contentType, String fileSize, Integer userId, Blob fileData) {
-        this.fileId = fileId;
+
+
+  public File( String fileName, String contentType, String fileSize, Integer userid, byte[] fileData) {
+      //  this.fileId = fileId;
         this.fileName = fileName;
         this.contentType = contentType;
         this.fileSize = fileSize;
-        this.userId = userId;
+        this.userid = userid;
         this.fileData = fileData;
     }
 
@@ -61,18 +63,18 @@ public class File {
     }
 
     public Integer getUserId() {
-        return userId;
+        return userid;
     }
 
     public void setUserId(Integer userId) {
-        this.userId = userId;
+        this.userid = userId;
     }
 
-    public Blob getFileData() {
+    public byte[] getFileData() {
         return fileData;
     }
 
-    public void setFileData(Blob fileData) {
+    public void setFileData(byte[] fileData) {
         this.fileData = fileData;
     }
 }

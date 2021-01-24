@@ -27,7 +27,6 @@ public class SignupController {
     @PostMapping()
     public String signupUser(@ModelAttribute User user, Model model) {
         String signupError = null;
-        System.out.println("app enters the signup postmapping");
 
         if (!userService.isUsernameAvailable(user.getUsername())) {
             signupError = "The username already exists.";
@@ -37,17 +36,16 @@ public class SignupController {
             int rowsAdded = userService.createUser(user);
             if (rowsAdded < 0) {
                 signupError = "There was an error signing you up. Please try again.";
-                System.out.println(signupError);
+
             }
         }
 
         if (signupError == null) {
-            System.out.println("signup went through succesfully");
             model.addAttribute("signupSuccess", true);
         } else {
             model.addAttribute("signupError", signupError);
         }
 
-        return "signup";
+        return "login";
     }
 }
