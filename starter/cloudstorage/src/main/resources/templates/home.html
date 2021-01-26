@@ -141,13 +141,13 @@
                                 <tbody>
                                 <tr>
                                     <td>
-                                        <button type="button" class="btn btn-success">
-                                       <!-- th:credentialId="${credo.getCredentialId()}"
+                                        <button type="button" class="btn btn-success"
+                                        th:credentialId="${credo.getCredentialId()}"
                                         th:url="${credo.getUrl()}"
                                         th:username="${credo.getUserName()}"
                                         th:password="${credo.getPassword()}"
                                         th:onclick="javascript:showCredentialModal(this.getAttribute('credentialId'),this.getAttribute('url'),this.getAttribute('username'),this.getAttribute('password');"
-                                        -->Edit</button>
+                                     >Edit</button>
                                         <a th:href="@{/credential-delete(url=${credo.getUrl()})}" class="btn btn-danger">Delete</a>
                                     </td>
                                     <th th:text="${credo.getUrl()}" scope="row">Example Credential URL</th>
