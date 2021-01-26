@@ -18,6 +18,8 @@ public class Credential {
     private String password;
     private Integer userId;
 
+    public Credential(){};
+
     public Credential(Integer credentialId, String url, String userName, String key, String password, Integer userId) {
         this.url = url;
         this.userName = userName;

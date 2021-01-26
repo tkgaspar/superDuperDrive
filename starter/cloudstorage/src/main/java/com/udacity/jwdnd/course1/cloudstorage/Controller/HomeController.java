@@ -1,6 +1,7 @@
 package com.udacity.jwdnd.course1.cloudstorage.Controller;
 
 
+import com.udacity.jwdnd.course1.cloudstorage.Model.CredentialForm;
 import com.udacity.jwdnd.course1.cloudstorage.Model.NoteForm;
 import com.udacity.jwdnd.course1.cloudstorage.Model.StorageForm;
 import com.udacity.jwdnd.course1.cloudstorage.Model.User;
@@ -36,16 +37,20 @@ public class HomeController {
     public StorageForm getStorageForm() {
         return new StorageForm();
     }
+    @ModelAttribute
     public NoteForm noteForm(){
         return new NoteForm();
     }
+    @ModelAttribute
+    public CredentialForm credentialForm(){return new CredentialForm();}
 
     @GetMapping()
     public String getHomePage(Authentication auth, Model model) {
         User user = userService.getUser(auth.getName());
-        model.addAttribute("files", fileService.fileList(user.getUserId()));
+        model.addAttribute("UploadedFiles", fileService.fileList(user.getUserId()));
         model.addAttribute("SavedNotes", noteService.getNotesList(user.getUserId()));
-        System.out.println("app enters @GetMapping in HomeController, after @Getmapping in FileUploadController");
+        model.addAttribute("SavedCredentials",credentialService.getCredentialList(user.getUserId()));
+        System.out.println("app enters @GetMapping in HomeController");
         return "home";
     }
 
@@ -54,6 +59,7 @@ public class HomeController {
         User user = userService.getUser(auth.getName());
         model.addAttribute("UploadedFiles", fileService.fileList(user.getUserId()));
         model.addAttribute("SavedNotes", noteService.getNotesList(user.getUserId()));
+        model.addAttribute("SavedCredentials",credentialService.getCredentialList(user.getUserId()));
         return "home";
     }
 }
