@@ -21,12 +21,11 @@ public class CredentialService {
 
     public void addCredential(CredentialForm credoForm, Integer userId) {
         Credential credo = new Credential();
-        credo.setCredentialId(credoForm.getCredentialId());
         credo.setUrl(credoForm.getUrl());
         credo.setUserName(credoForm.getUserName());
         credo.setKey(credoForm.getKey());
         credo.setPassword(credoForm.getPassword());
-        this.credentialMapper.insert(credo);
+        System.out.println("If inserted into database, then this results in 1!, so:"+this.credentialMapper.insert(credo));
     }
 
     public void updateCredential(CredentialForm credoForm) {

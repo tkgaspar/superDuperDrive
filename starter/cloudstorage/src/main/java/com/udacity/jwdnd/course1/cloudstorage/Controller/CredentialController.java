@@ -38,8 +38,9 @@ public class CredentialController {
             this.credentialService.addCredential(credentialForm, user.getUserId());
         }else{
             this.credentialService.updateCredential(credentialForm);
+
         }
-        attributes.addAttribute("SavedCredentials", credentialService.getCredentialList(user.getUserId()));
+        attributes.addAttribute("SavedCredentials", this.credentialService.getCredentialList(user.getUserId()));
         return new ModelAndView("forward:/home", attributes);
     }
 

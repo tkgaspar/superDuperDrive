@@ -131,15 +131,15 @@
                         <div class="table-responsive">
                             <table class="table table-striped"  id="credentialTable">
                                 <thead>
-                                    <tr th:each="credo: ${SavedCredentials}">
+                                    <tr>
                                         <th style="width: 20%" scope="col"></th>
-                                        <th th:text="${credo.getUrl()}" style="width: 35%" scope="col">URL</th>
-                                        <th th:text="${credo.getUserName()}" style="width: 20%" scope="col">Username</th>
-                                        <th th:text="${credo.getPassword()}" style="width: 25%" scope="col">Password</th>
+                                        <th  style="width: 35%" scope="col">URL</th>
+                                        <th  style="width: 20%" scope="col">Username</th>
+                                        <th  style="width: 25%" scope="col">Password</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
+                                <tr  th:each="credo: ${SavedCredentials}">
                                     <td>
                                         <button type="button" class="btn btn-success"
                                         th:credentialId="${credo.getCredentialId()}"
