@@ -21,12 +21,12 @@ public class NoteService {
     }
 
 
-    public void addNote(NoteForm noteform, Integer userId) {
+    public Integer addNote(NoteForm noteform, Integer userId) {
         Note note = new Note();
         note.setNoteTitle(noteform.getNoteTitle());
         note.setNoteDescription(noteform.getNoteDescription());
         note.setUserId(userId);
-        this.noteMapper.insert(note);
+        return this.noteMapper.insert(note);
     }
 
     public void deleteNote(String noteTitle, Integer userid) {

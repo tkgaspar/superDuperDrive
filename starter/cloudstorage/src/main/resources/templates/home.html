@@ -11,8 +11,8 @@
     <body class="p-3 mb-2 bg-light text-black">
         <div class="container">
             <div id="logoutDiv">
-                <form action="#" method="POST">
-                    <button type="submit" class="btn btn-secondary float-right">Logout</button>
+                <form th:action="@{'/logout'}" action="#" method="POST">
+                    <button id="logout-button" type="submit" class="btn btn-secondary float-right">Logout</button>
                 </form>
             </div>
             <div id="contentDiv" style="clear: right;">
@@ -61,7 +61,7 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="nav-notes" role="tabpanel" aria-labelledby="nav-notes-tab">
-                        <button style="margin: 0.25em;" type="button" class="btn btn-info float-right" onclick="showNoteModal()">
+                        <button id="show" style="margin: 0.25em;" type="button" class="btn btn-info float-right" onclick="showNoteModal()">
                             + Add a New Note
                         </button>
 
@@ -78,15 +78,16 @@
                                     <tr th:each="notes : ${SavedNotes}">
                                         <td>
                                             <button  type="button" class="btn btn-success"
+                                                     th:id="'edtbtn of row '+${notes.getNoteId()}"
                                                      th:noteId="${notes.getNoteId()}"
                                                      th:noteTitle="${notes.getNoteTitle()}"
                                                      th:noteDescription="${notes.getNoteDescription()}"
                                                      th:onclick="javascript:showNoteModal(this.getAttribute('noteId'),this.getAttribute('noteTitle'),this.getAttribute('noteDescription'));"
                                             >Edit</button>
-                                            <a th:href="@{/note-delete(noteTitle=${notes.getNoteTitle()})}" class="btn btn-danger">Delete</a>
+                                            <a th:id="'dltbtn of row '+${notes.getNoteId()}" th:href="@{/note-delete(noteTitle=${notes.getNoteTitle()})}" class="btn btn-danger">Delete</a>
                                         </td>
-                                        <th   scope="row" th:text="${notes.getNoteTitle()}">Example Note Title</th>
-                                        <td th:text="${notes.getNoteDescription()}">Example Note Description </td>
+                                        <th th:id="'noteTitle of row '+${notes.getNoteId()}" scope="row" th:text="${notes.getNoteTitle()}">Example Note Title</th>
+                                        <td th:id="'notedesc of row '+${notes.getNoteId()}" th:text="${notes.getNoteDescription()}">Example Note Description </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -142,12 +143,14 @@
                                 <tr  th:each="credo: ${SavedCredentials}">
                                     <td>
                                         <button type="button" class="btn btn-success"
-                                        th:credentialId="${credo.getCredentialId()}"
+                                                th:onclick="javascript:showCredentialModal([[${credo.getCredentialId()}]],[[${credo.getUrl()}]],[[${credo.getUserName()}]],[[${credo.getDecryptedPassword()}]])">
+                                       <!-- th:credentialId="${credo.getCredentialId()}"
                                         th:url="${credo.getUrl()}"
                                         th:username="${credo.getUserName()}"
                                         th:password="${credo.getPassword()}"
                                         th:onclick="javascript:showCredentialModal(this.getAttribute('credentialId'),this.getAttribute('url'),this.getAttribute('username'),this.getAttribute('password');"
-                                     >Edit</button>
+                                     -->
+                                        Edit</button>
                                         <a th:href="@{/credential-delete(url=${credo.getUrl()})}" class="btn btn-danger">Delete</a>
                                     </td>
                                     <th th:text="${credo.getUrl()}" scope="row">Example Credential URL</th>

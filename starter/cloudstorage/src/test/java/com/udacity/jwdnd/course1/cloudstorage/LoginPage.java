@@ -32,4 +32,6 @@ public class LoginPage {
         inputPassword.sendKeys(pw);
         submitButton.submit();
     }
+
+
 }

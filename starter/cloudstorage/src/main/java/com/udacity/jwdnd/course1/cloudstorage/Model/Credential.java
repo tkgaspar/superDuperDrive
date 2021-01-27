@@ -10,6 +10,8 @@ package com.udacity.jwdnd.course1.cloudstorage.Model;
         userid INT,
         foreign key (userid) references USERS(userid)*/
 
+import com.udacity.jwdnd.course1.cloudstorage.services.EncryptionService;
+
 public class Credential {
     private Integer credentialId;
     private String url;
@@ -75,5 +77,10 @@ public class Credential {
 
     public void setCredentialId(Integer credentialId) {
         this.credentialId = credentialId;
+    }
+
+    public String getDecryptedPassword (){
+        EncryptionService encryptionService=new EncryptionService();
+        return encryptionService.decryptValue(this.password, this.key);
     }
 }

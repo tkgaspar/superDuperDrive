@@ -28,6 +28,10 @@ public class SignupPage {
     @FindBy(id="linkToLoginPage")
     private WebElement linkToLogin;
 
+    public SignupPage(WebDriver driver) {
+        PageFactory.initElements(driver, this);
+    }
+
     public void signup(String fn,String ln,String username,String password){
         firstNameInput.sendKeys(fn);
         lastNameInput.sendKeys(ln);

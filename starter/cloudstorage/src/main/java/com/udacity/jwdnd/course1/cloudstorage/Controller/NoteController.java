@@ -12,6 +12,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -25,6 +26,7 @@ public class NoteController {
         this.userService = userService;
     }
 
+
     @GetMapping("/note")
     public String getNoteList(@ModelAttribute("noteForm") NoteForm noteForm, Model model) {
         model.addAttribute("SavedNotes", noteService.getNotesList(noteForm.getUserId()));
@@ -33,29 +35,44 @@ public class NoteController {
 
 
     @PostMapping("/note")
-    public ModelAndView addNote(@ModelAttribute("noteForm") NoteForm noteForm, Authentication auth, ModelMap attributes) {
-        String saveError = null;
+    public ModelAndView addNote(NoteForm noteForm, Authentication auth, ModelMap attributes) {
         User user = this.userService.getUser(auth.getName());
-            if (noteForm.getNoteId() == null) {
-                this.noteService.addNote(noteForm, user.getUserId());
+        if (noteForm.getNoteId() == null) {
+            if(this.noteService.addNote(noteForm, user.getUserId())==1) {
+                attributes.addAttribute("noteUploadSuccess", "Your note has been saved succesfully ! ");
+                attributes.addAttribute("SavedNotes", noteService.getNotesList(noteForm.getUserId()));
             }else{
-                this.noteService.updateNote(noteForm);
+                attributes.addAttribute("noteUploadError", "Something went wrong, please try again!");
             }
-        attributes.addAttribute("SavedNotes", noteService.getNotesList(noteForm.getUserId()));
-        return new ModelAndView("forward:/home", attributes);
+        } else{
+            this.noteService.updateNote(noteForm);
+            attributes.addAttribute("noteUploadSuccess", "Your note has been saved succesfully ! ");
+            attributes.addAttribute("SavedNotes", noteService.getNotesList(noteForm.getUserId()));
+
+        }
+        return new ModelAndView("forward:/result", attributes);
     }
 
     @GetMapping("/note-delete")
     public ModelAndView deleteNote(@ModelAttribute("noteForm") NoteForm noteForm, Authentication auth, ModelMap attributes) {
         User user = this.userService.getUser(auth.getName());
-        for(Note note:this.noteService.getNotesList(user.getUserId())){
-            if(note.getNoteTitle().equals(noteForm.getNoteTitle())){
-                this.noteService.deleteNote(note.getNoteTitle(),user.getUserId());
+        for (Note note : this.noteService.getNotesList(user.getUserId())) {
+            if (note.getNoteTitle().equals(noteForm.getNoteTitle())) {
+                this.noteService.deleteNote(note.getNoteTitle(), user.getUserId());
             }
         }
         attributes.addAttribute("SavedNotes", noteService.getNotesList(noteForm.getUserId()));
         return new ModelAndView("forward:/home", attributes);
     }
 
+    @GetMapping("/result")
+    public String getResultPage() {
+        return "result";
+    }
+
+    @PostMapping("/result")
+    public String postResultPage() {
+        return "result";
+    }
 
 }

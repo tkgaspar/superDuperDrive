@@ -5,6 +5,7 @@ import com.udacity.jwdnd.course1.cloudstorage.Model.StorageForm;
 import com.udacity.jwdnd.course1.cloudstorage.Model.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
+import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -14,15 +15,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 
 @Controller
-//@RequestMapping("/file")
 public class FileUploadController {
 
     private FileService fileService;
@@ -33,6 +33,7 @@ public class FileUploadController {
         this.userService = userService;
     }
 
+
     @GetMapping("/file")
     public String getFileList(@ModelAttribute("storageForm") StorageForm storageForm, Model model) {
         model.addAttribute("files", fileService.fileList(storageForm.getUserId()));
@@ -41,18 +42,19 @@ public class FileUploadController {
 
 
     @PostMapping("/file")
-    public ModelAndView uploadFile(@RequestParam("fileUpload") MultipartFile fileUpload, Authentication auth, StorageForm storageForm, ModelMap attributes) throws IOException {
-        String uploadError = null;
+    public ModelAndView uploadFile(@RequestParam("fileUpload") MultipartFile fileUpload, Authentication auth, StorageForm storageForm, ModelMap attributes) throws IOException, SizeLimitExceededException {
         User user = userService.getUser(auth.getName());
         if (fileUpload.isEmpty()) {
-            attributes.addAttribute("Please select a file to upload", uploadError);
+            attributes.addAttribute("UploadError", "Please select a file to upload! ");
         } else if (fileService.getFile(fileUpload.getOriginalFilename(), user.getUserId()) != null) {
-            attributes.addAttribute("There is a file by that name already, please upload another file", uploadError);
+            attributes.addAttribute("UploadError", "There is a file by that name already, please upload another file, or rename your file! ");
         } else {
             this.fileService.addFile(fileService.convertMpFile(fileUpload, user.getUserId()));
             attributes.addAttribute("UploadedFiles", fileService.fileList(user.getUserId()));
+            attributes.addAttribute("UploadSucces", "Your file has been uploaded succesfully! ");
+
         }
-        return new ModelAndView("forward:/home", attributes);
+        return new ModelAndView("forward:/result", attributes);
     }
 
 
@@ -62,11 +64,12 @@ public class FileUploadController {
         for (File file : this.fileService.fileList(user.getUserId())) {
             if (file.getFileName().equals(storageForm.getFileName())) {
                 this.fileService.removeFile(user.getUserId(), file.getFileName());
+                attributes.addAttribute("UploadSuccess", "Your file has been deleted succesfully");
             }
 
         }
         attributes.addAttribute("UploadedFiles", fileService.fileList(user.getUserId()));
-        return new ModelAndView("forward:/home", attributes);
+        return new ModelAndView("forward:/result", attributes);
 
     }
 
@@ -80,6 +83,16 @@ public class FileUploadController {
                 .contentType(MediaType.parseMediaType(file.getContentType()))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFileName() + "\"")
                 .body(new ByteArrayResource(file.getFileData()));
+    }
+
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ModelAndView handleError2(SizeLimitExceededException e, ModelMap attributes) {
+        System.out.println("ExceptionHandler is entered upon error");
+        attributes.addAttribute("UploadError", "The file you are trying to upload exceeds the 10MB limit! ");
+        return new ModelAndView("forward:/result");
+
+
     }
 }
 
