@@ -125,7 +125,7 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="nav-credentials" role="tabpanel" aria-labelledby="nav-credentials-tab">
-                        <button style="margin: 0.25em;" type="button" class="btn btn-info float-right" onclick="showCredentialModal()">
+                        <button id="showCredoModal" style="margin: 0.25em;" type="button" class="btn btn-info float-right" onclick="showCredentialModal()">
                             + Add a New Credential
                         </button>
 
@@ -143,6 +143,7 @@
                                 <tr  th:each="credo: ${SavedCredentials}">
                                     <td>
                                         <button type="button" class="btn btn-success"
+                                                th:id="'cedtbtn of row '+${credo.getCredentialId()}"
                                                 th:onclick="javascript:showCredentialModal([[${credo.getCredentialId()}]],[[${credo.getUrl()}]],[[${credo.getUserName()}]],[[${credo.getDecryptedPassword()}]])">
                                        <!-- th:credentialId="${credo.getCredentialId()}"
                                         th:url="${credo.getUrl()}"
@@ -151,11 +152,12 @@
                                         th:onclick="javascript:showCredentialModal(this.getAttribute('credentialId'),this.getAttribute('url'),this.getAttribute('username'),this.getAttribute('password');"
                                      -->
                                         Edit</button>
-                                        <a th:href="@{/credential-delete(url=${credo.getUrl()})}" class="btn btn-danger">Delete</a>
+                                        <a      th:id="'cdltbtn of row '+${credo.getCredentialId()}"
+                                                th:href="@{/credential-delete(url=${credo.getUrl()})}" class="btn btn-danger">Delete</a>
                                     </td>
-                                    <th th:text="${credo.getUrl()}" scope="row">Example Credential URL</th>
-                                    <td th:text="${credo.getUserName()}" >Example Credential Username</td>
-                                    <td th:text="${credo.getPassword()}">Example Credential Password</td>
+                                    <th th:id=" 'Url of row ' + ${credo.getCredentialId()}" th:text="${credo.getUrl()}" scope="row">Example Credential URL</th>
+                                    <td th:id=" 'Username of row ' + ${credo.getCredentialId()}" th:text="${credo.getUserName()}" >Example Credential Username</td>
+                                    <td th:id=" 'Password of row ' + ${credo.getCredentialId()}" th:text="${credo.getPassword()}">Example Credential Password</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -171,7 +173,7 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <form th:object="${credentialForm}"  th:action="@{/credential}" action="#" method="POST">
+                                        <form id="credoModalForm" th:object="${credentialForm}"  th:action="@{/credential}" action="#" method="POST">
                                             <input type="hidden" name="credentialId" id="credential-id">
                                             <div class="form-group">
                                                 <label for="note-title" class="col-form-label">URL</label>

@@ -4,7 +4,6 @@ import com.udacity.jwdnd.course1.cloudstorage.Model.Credential;
 import com.udacity.jwdnd.course1.cloudstorage.Model.CredentialForm;
 import com.udacity.jwdnd.course1.cloudstorage.Model.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
-import com.udacity.jwdnd.course1.cloudstorage.services.EncryptionService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -24,11 +23,11 @@ public class CredentialController {
 
     public CredentialController(UserService userService, CredentialService credentialService) {
         this.userService = userService;
-        this.credentialService= credentialService;
+        this.credentialService = credentialService;
     }
 
     @GetMapping("/credential")
-    public String getCredentialList(@ModelAttribute("credentialForm")CredentialForm credentialForm, Model model) {
+    public String getCredentialList(@ModelAttribute("credentialForm") CredentialForm credentialForm, Model model) {
         model.addAttribute("SavedCredentials", credentialService.getCredentialList(credentialForm.getUserId()));
         return "home";
     }
@@ -38,31 +37,37 @@ public class CredentialController {
         String saveError = null;
         User user = this.userService.getUser(auth.getName());
         if (credentialForm.getCredentialId() == null) {
-            this.credentialService.addCredential(credentialForm, user.getUserId());
-            System.out.println("CredentialForm credentialId is null, credential is being saved");
-        }else{
+            if (this.credentialService.addCredential(credentialForm, user.getUserId()) == 1) {
+                attributes.addAttribute("credoSuccessBool", true);
+                attributes.addAttribute("credoSuccess", "Your credential has been saved successfully! ");
+            } else {
+                attributes.addAttribute("credoErrorBool", true);
+                attributes.addAttribute("credoError", "Something went wrong, please try again! ");
+            }
+        } else {
             this.credentialService.updateCredential(credentialForm);
-            System.out.println("CredentialForm credentialId is: "+credentialForm.getCredentialId()+" credential is being updated");
+            attributes.addAttribute("credoSuccessBool", true);
+            attributes.addAttribute("credoSuccess", "Your credential has been saved successfully! ");
         }
         attributes.addAttribute("SavedCredentials", this.credentialService.getCredentialList(user.getUserId()));
-        return new ModelAndView("forward:/home", attributes);
+        return new ModelAndView("forward:/result", attributes);
     }
 
     @GetMapping("/credential-delete")
-    public ModelAndView deletecredential(@ModelAttribute("credentialForm") CredentialForm credentialForm, Authentication auth, ModelMap attributes) {
+    public ModelAndView deleteCredential(@ModelAttribute("credentialForm") CredentialForm credentialForm, Authentication auth, ModelMap attributes) {
         User user = this.userService.getUser(auth.getName());
-        for(Credential credential:this.credentialService.getCredentialList(user.getUserId())){
-            System.out.println("credential credoId: "+credential.getCredentialId());
-            System.out.println("credentialForm credoId: "+credentialForm.getCredentialId());
-            if(credential.getUrl().equals(credentialForm.getUrl())){
-                this.credentialService.deleteCredential(credential.getCredentialId(),user.getUserId());
+        for (Credential credential : this.credentialService.getCredentialList(user.getUserId())) {
+            if (credential.getUrl().equals(credentialForm.getUrl())) {
+                if (this.credentialService.deleteCredential(credential.getCredentialId(), user.getUserId()) == 1) {
+                    attributes.addAttribute("credoSuccessBool", true);
+                    attributes.addAttribute("CredoSuccess","Your credential has been saved successfully");
+                } else {
+                    attributes.addAttribute("credoErrorBool", true);
+                    attributes.addAttribute("CredoError","Something went wrong, please try again");
+                }
             }
         }
-
         attributes.addAttribute("SavedCredentials", credentialService.getCredentialList(user.getUserId()));
-        return new ModelAndView("forward:/home", attributes);
+        return new ModelAndView("forward:/result", attributes);
     }
-
-
-
 }

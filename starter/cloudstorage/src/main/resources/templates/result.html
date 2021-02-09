@@ -10,24 +10,33 @@
     </head>
     <body class="p-3 mb-2 bg-light text-black">
         <div class="container justify-content-center w-50 p-3" style="margin-top: 5em;">
-            <div   th:if="${UploadSucces}" class="alert alert-success fill-parent">
+            <div   th:if="${UploadSuccessBool}" class="alert alert-success fill-parent">
                 <h1 class="display-5">Success</h1>
-                <span id="fileSuccess" th:text="${UploadSucces}">Your changes were successfully saved.</span>
-                <span>Click <a th:href="@{/home}">here</a> to continue.</span>
+                <span id="fileSuccess" th:text="${UploadSuccess}">Your changes were successfully saved.</span>
+                <span>Click <a id="fileSuccessLink" th:href="@{/home}">here</a> to continue.</span>
             </div>
-          <div  th:if="${noteUploadSucces}" class="alert alert-success fill-parent">
+          <div  th:if="${noteUploadSuccessBool}" class="alert alert-success fill-parent">
                 <h1 class="display-5">Success</h1>
-                <span id="noteSuccess" th:text="${noteUploadSucces}">Your changes were successfully saved.</span>
-                <span>Click <a th:href="@{/home}">here</a> to continue.</span>
+                <span id="noteSuccess" th:text="${noteUploadSuccess}">Your changes were successfully saved.</span>
+                <span>Click <a id="noteSuccessLink" th:href="@{/home}">here</a> to continue.</span>
             </div>
-            <div  th:if="${noteUploadError}" class="alert alert-danger fill-parent">
+            <div  th:if="${credoSuccessBool}" class="alert alert-success fill-parent">
+                <h1 class="display-5">Success</h1>
+                <span id="credoSuccess" th:text="${credoSuccess}">Your changes were successfully saved.</span>
+                <span>Click <a id="credoSuccessLink" th:href="@{/home}">here</a> to continue.</span>
+            </div>
+            <div  th:if="${credoErrorBool}" class="alert alert-danger fill-parent">
                 <h1 class="display-5">Error</h1>
-                <span id="noteError" th:text="${noteUploadError}">Your changes were not saved. Click <a th:href="@{/home}">here</a> to continue.</span>
+                <span id="credoError" th:text="${credoError}">Your changes were not saved. Click <a id="credoErrorLink" th:href="@{/home}">here</a> to continue.</span>
             </div>
-            <div  th:if="${UploadError}" class="alert alert-danger fill-parent">
+            <div  th:if="${noteUploadErrorBool}" class="alert alert-danger fill-parent">
+                <h1 class="display-5">Error</h1>
+                <span id="noteError" th:text="${noteUploadError}">Your changes were not saved. Click <a id="noteErrorLink"  th:href="@{/home}">here</a> to continue.</span>
+            </div>
+            <div  th:if="${UploadErrorBool}" class="alert alert-danger fill-parent">
                 <h1 class="display-5">Error</h1>
                 <span id="fileError" th:text="${UploadError}">Example Error Message</span>
-                <span>Click <a th:href="@{/home}" >here</a> to continue.</span>
+                <span>Click <a id="fileErrorLink"  th:href="@{/home}" >here</a> to continue.</span>
             </div>
         </div>
     </body>

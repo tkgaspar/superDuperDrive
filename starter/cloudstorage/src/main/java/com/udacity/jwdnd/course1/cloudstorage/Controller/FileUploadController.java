@@ -45,13 +45,16 @@ public class FileUploadController {
     public ModelAndView uploadFile(@RequestParam("fileUpload") MultipartFile fileUpload, Authentication auth, StorageForm storageForm, ModelMap attributes) throws IOException, SizeLimitExceededException {
         User user = userService.getUser(auth.getName());
         if (fileUpload.isEmpty()) {
+            attributes.addAttribute("UploadErrorBool", true);
             attributes.addAttribute("UploadError", "Please select a file to upload! ");
         } else if (fileService.getFile(fileUpload.getOriginalFilename(), user.getUserId()) != null) {
+            attributes.addAttribute("UploadErrorBool", true);
             attributes.addAttribute("UploadError", "There is a file by that name already, please upload another file, or rename your file! ");
         } else {
             this.fileService.addFile(fileService.convertMpFile(fileUpload, user.getUserId()));
             attributes.addAttribute("UploadedFiles", fileService.fileList(user.getUserId()));
-            attributes.addAttribute("UploadSucces", "Your file has been uploaded succesfully! ");
+            attributes.addAttribute("UploadSuccessBool", true);
+            attributes.addAttribute("UploadSuccess", "Your file has been uploaded successfully! ");
 
         }
         return new ModelAndView("forward:/result", attributes);

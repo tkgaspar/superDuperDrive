@@ -39,14 +39,17 @@ public class NoteController {
         User user = this.userService.getUser(auth.getName());
         if (noteForm.getNoteId() == null) {
             if(this.noteService.addNote(noteForm, user.getUserId())==1) {
-                attributes.addAttribute("noteUploadSuccess", "Your note has been saved succesfully ! ");
+                attributes.addAttribute("noteUploadSuccessBool", true);
+                attributes.addAttribute("noteUploadSuccess", "Your note has been saved successfully ! ");
                 attributes.addAttribute("SavedNotes", noteService.getNotesList(noteForm.getUserId()));
             }else{
+                attributes.addAttribute("noteUploadErrorBool", true);
                 attributes.addAttribute("noteUploadError", "Something went wrong, please try again!");
             }
         } else{
             this.noteService.updateNote(noteForm);
-            attributes.addAttribute("noteUploadSuccess", "Your note has been saved succesfully ! ");
+            attributes.addAttribute("noteUploadSuccessBool", true);
+            attributes.addAttribute("noteUploadSuccess", "Your note has been saved successfully ! ");
             attributes.addAttribute("SavedNotes", noteService.getNotesList(noteForm.getUserId()));
 
         }
