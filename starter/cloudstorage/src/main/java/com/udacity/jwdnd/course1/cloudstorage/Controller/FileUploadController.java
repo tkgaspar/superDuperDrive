@@ -90,8 +90,9 @@ public class FileUploadController {
 
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
-    public ModelAndView handleError2(SizeLimitExceededException e, ModelMap attributes) {
+    public ModelAndView sizeError(SizeLimitExceededException e, ModelMap attributes) {
         System.out.println("ExceptionHandler is entered upon error");
+        attributes.addAttribute("UploadErrorBool", true);
         attributes.addAttribute("UploadError", "The file you are trying to upload exceeds the 10MB limit! ");
         return new ModelAndView("forward:/result");
 
