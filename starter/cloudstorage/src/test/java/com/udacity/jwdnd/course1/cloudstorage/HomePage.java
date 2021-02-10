@@ -38,7 +38,6 @@ public class HomePage {
     @FindBy(id = "credoModalForm")
     private WebElement credentialModal;
 
-
     @FindBy(id = "note-title")
     private WebElement noteTitle;
 
@@ -118,9 +117,7 @@ public class HomePage {
         wait = new WebDriverWait(driver, 3, 10);
         wait.until(ExpectedConditions.textToBePresentInElementLocated(By.id("noteTitle of row " + noteId), "Testing"));
         return this.noteTable.findElement(By.id("noteTitle of row " + noteId)).getText();
-
     }
-
 
     public String getDescription(Integer noteId) {
         return this.noteTable.findElement(By.id("notedesc of row " + noteId)).getText();
@@ -141,10 +138,8 @@ public class HomePage {
         return this.credoTable.findElement(By.id("Password of row " + credoId)).getText();
     }
 
-
     public void getNoteforEditing(Integer noteId) {
         this.noteTable.findElement(By.id("edtbtn of row " + noteId)).click();
-
     }
 
     public void getCredentialForEditing(Integer credoId) {
@@ -176,7 +171,6 @@ public class HomePage {
         result.returnHomeAfterMessage();
         accessNotesTab();
     }
-
 
     public void editExistingCredential(String changedUrl, String changedUsername, String changedPassword, Integer credentialId) {
         accessCredentialTab();

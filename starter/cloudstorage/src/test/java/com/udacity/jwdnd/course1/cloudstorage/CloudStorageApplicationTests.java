@@ -16,6 +16,7 @@ import java.security.SecureRandom;
 import java.util.Base64;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CloudStorageApplicationTests {
 
     @LocalServerPort
@@ -35,14 +36,15 @@ class CloudStorageApplicationTests {
         this.driver = new ChromeDriver();
     }
 
-   /* @AfterEach
+    @AfterEach
     public void afterEach() {
         if (this.driver != null) {
             driver.quit();
         }
-    }*/
+    }
 
     @Test
+    @Order(1)
     public void getHomePageUnauthorized() {
         driver.get("http://localhost:" + this.port + "/home");
         Assertions.assertEquals("Login", driver.getTitle());
@@ -65,7 +67,8 @@ class CloudStorageApplicationTests {
     }
 
     @Test
-    public void testUserSignupLogin() throws InterruptedException {
+    @Order(2)
+    public void testUserSignupLogin(){
         userSignupLogin();
         Assertions.assertEquals("Home", driver.getTitle());
 
@@ -83,6 +86,7 @@ class CloudStorageApplicationTests {
     /* Write a test that edits an existing note and verifies that the changes are displayed.*/
     /* Write a test that deletes a note and verifies that the note is no longer displayed.*/
     @Test
+    @Order(3)
     public void testCreateNote() throws InterruptedException {
         userSignupLogin();
         HomePage homepage = new HomePage(driver);
@@ -102,12 +106,11 @@ class CloudStorageApplicationTests {
     }
 
 
-       /*
 
-        Write a test that deletes an existing set of credentials and verifies that the credentials are no longer displayed.*/
-
+    //Write a test that deletes an existing set of credentials and verifies that the credentials are no longer displayed.//
     //Write a test that creates a set of credentials, verifies that they are displayed, and verifies that the displayed password is encrypted.
     @Test
+    @Order(4)
     public void testCredentials() throws InterruptedException {
         userSignupLogin();
         HomePage homepage = new HomePage(driver);
@@ -127,6 +130,7 @@ class CloudStorageApplicationTests {
     // Write a test that views an existing set of credentials, verifies that the viewable password is unencrypted, edits the credentials, and verifies that the changes are displayed.
     // Write a test that deletes an existing set of credentials and verifies that the credentials are no longer displayed.*/
     @Test
+    @Order(5)
     public void testExistingCredential() throws InterruptedException {
         userSignupLogin();
         HomePage homepage = new HomePage(driver);

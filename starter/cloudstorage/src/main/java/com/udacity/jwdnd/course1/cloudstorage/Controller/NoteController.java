@@ -12,7 +12,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -61,11 +60,18 @@ public class NoteController {
         User user = this.userService.getUser(auth.getName());
         for (Note note : this.noteService.getNotesList(user.getUserId())) {
             if (note.getNoteTitle().equals(noteForm.getNoteTitle())) {
-                this.noteService.deleteNote(note.getNoteTitle(), user.getUserId());
+                if(this.noteService.deleteNote(note.getNoteTitle(), user.getUserId())==1){
+                    attributes.addAttribute("noteUploadSuccessBool",true);
+                    attributes.addAttribute("noteUploadSuccess","Your note has been deleted! ");
+                }else{
+                    attributes.addAttribute("noteUploadsErrorBool",true);
+                    attributes.addAttribute("noteUploadError","Something went wrong, please try again! ");
+                }
+
             }
         }
         attributes.addAttribute("SavedNotes", noteService.getNotesList(noteForm.getUserId()));
-        return new ModelAndView("forward:/home", attributes);
+        return new ModelAndView("forward:/result", attributes);
     }
 
     @GetMapping("/result")
