@@ -44,12 +44,16 @@ public class FileUploadController {
     @PostMapping("/file")
     public ModelAndView uploadFile(@RequestParam("fileUpload") MultipartFile fileUpload, Authentication auth, StorageForm storageForm, ModelMap attributes) throws IOException, SizeLimitExceededException {
         User user = userService.getUser(auth.getName());
+        System.out.println("The size of the file uploading is: " + fileUpload.getSize());
         if (fileUpload.isEmpty()) {
             attributes.addAttribute("UploadErrorBool", true);
             attributes.addAttribute("UploadError", "Please select a file to upload! ");
         } else if (fileService.getFile(fileUpload.getOriginalFilename(), user.getUserId()) != null) {
             attributes.addAttribute("UploadErrorBool", true);
             attributes.addAttribute("UploadError", "There is a file by that name already, please upload another file, or rename your file! ");
+        } else if (fileUpload.getSize() > 10485760) {
+            attributes.addAttribute("UploadErrorBool", true);
+            attributes.addAttribute("UploadError", "Sorry, the file you are trying to upload, exceeds the 10 MB limit!");
         } else {
             this.fileService.addFile(fileService.convertMpFile(fileUpload, user.getUserId()));
             attributes.addAttribute("UploadedFiles", fileService.fileList(user.getUserId()));
@@ -89,15 +93,6 @@ public class FileUploadController {
     }
 
 
-    @ExceptionHandler(MaxUploadSizeExceededException.class)
-    public ModelAndView sizeError(SizeLimitExceededException e, ModelMap attributes) {
-        System.out.println("ExceptionHandler is entered upon error");
-        attributes.addAttribute("UploadErrorBool", true);
-        attributes.addAttribute("UploadError", "The file you are trying to upload exceeds the 10MB limit! ");
-        return new ModelAndView("forward:/result");
-
-
-    }
 }
 
 
