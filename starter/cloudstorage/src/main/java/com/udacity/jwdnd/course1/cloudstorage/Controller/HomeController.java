@@ -76,4 +76,5 @@ public class HomeController {
         }
         return "redirect:/login?logout";
     }
+
 }
